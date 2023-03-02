@@ -1,0 +1,55 @@
+import pyautogui
+import keyboard
+
+# definir as coordenadas dos slots do inventário
+slot1_x, slot1_y = 100, 200
+slot2_x, slot2_y = 150, 200
+slot3_x, slot3_y = 200, 200
+
+# definir o tamanho dos slots
+slot_width, slot_height = 50, 50
+
+# obter o nome do personagem
+character_name = pyautogui.prompt('Digite o nome do personagem para enviar os itens:')
+
+# obter a quantidade de itens a serem transferidos
+item_quantity = pyautogui.prompt('Digite a quantidade de itens a serem transferidos:')
+
+# obter o limite de transferência dos itens
+transfer_limit = pyautogui.prompt('Digite o limite de transferência dos itens:')
+
+# obter a quantidade de repetição do Exchange
+exchange_repetitions = pyautogui.prompt('Digite a quantidade de repetições do Exchange:')
+
+# converter as entradas para números inteiros
+item_quantity = int(item_quantity)
+transfer_limit = int(transfer_limit)
+exchange_repetitions = int(exchange_repetitions)
+
+# selecionar o primeiro slot do inventário
+pyautogui.click(slot1_x, slot1_y)
+
+# pressionar e segurar a tecla shift para selecionar vários itens
+keyboard.press_and_release('shift')
+
+# selecionar a quantidade de itens a serem transferidos com base no limite
+selected_items = min(item_quantity, transfer_limit)
+for i in range(selected_items - 1):
+    pyautogui.click(slot1_x + slot_width * (i+1), slot1_y)
+
+# copiar os itens selecionados
+keyboard.press_and_release('ctrl+c')
+
+# selecionar o personagem de destino
+pyautogui.click(500, 500) # coordenadas do personagem
+
+# colar os itens transferidos
+for i in range(exchange_repetitions):
+    keyboard.press_and_release('ctrl+v')
+    pyautogui.sleep(1)
+
+# aguardar a transferência ser concluída
+pyautogui.sleep(1)
+
+# voltar para o inventário
+keyboard.press_and_release('esc')
